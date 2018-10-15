@@ -1,4 +1,4 @@
-The best way in order to get the jar filr is use:
+The best way in order to get the jar file is to use:
 
 $ mvn package
 
