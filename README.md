@@ -33,6 +33,10 @@ For instructions on running the code, please consult the README in each folder.
 
 This is the list of examples:
 
+**Storage - BlobStore:**
+
+* [jcloudsblobstorecreate](/jcloudsblobstorecreate) - Apache jclouds BlobStore Create: Example of how to handle a BlobStore container and create a new BlobStore container.
+
 ## License
 
 This code is released under the MIT License. See LICENSE file.
