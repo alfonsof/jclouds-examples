@@ -37,6 +37,7 @@ This is the list of examples:
 
 * [jcloudsblobstoregetlocations](/jcloudsblobstoregetlocations) - Apache jclouds BlobStore Get Locations: Example of how to handle BlobStore containers and get the available locations for BlobStore containers.
 * [jcloudsblobstorecreate](/jcloudsblobstorecreate) - Apache jclouds BlobStore Create: Example of how to handle a BlobStore container and create a new BlobStore container.
+* [jcloudsblobstoredelete](/jcloudsblobstoredelete) - Apache jclouds BlobStore Delete: Example of how to handle a BlobStore container and delete a BlobStore container.
 
 ## License
 
