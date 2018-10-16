@@ -6,7 +6,7 @@ This folder contains a Java application example that handles BlobStore container
 * Microsoft Azure
 * Google Cloud Platform (GCP)
 
-It allows to download a blob from a BlobStore container to a local file for several cloud providers:
+It allows to download a blob from a BlobStore container to a local file in several cloud providers:
 
 * S3 bucket on AWS (Amazon Web Services)
 * Blob Storage container on Microsoft Azure

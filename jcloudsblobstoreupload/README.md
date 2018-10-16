@@ -6,7 +6,7 @@ This folder contains a Java application example that handles BlobStore container
 * Microsoft Azure
 * Google Cloud Platform (GCP)
 
-It allows to upload a local file to a BlobStore container:
+It allows to upload a local file to a BlobStore container in several cloud providers:
 
 * S3 bucket on AWS (Amazon Web Services)
 * Blob Storage container on Microsoft Azure
