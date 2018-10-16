@@ -1,0 +1,19 @@
+The best way in order to get the jar file is to use:
+
+$ mvn package
+
+
+In order to avoid an error message "Invalid signature file digest for Manifest main attributes", we have to remove from the jar file the files:
+
+META-INF/BCKEY.DSA
+META-INF/BCKEY.SF
+
+We can exclude these files with "maven-shade-plugin". 
+
+Working with IntelliJ this functionality does not work.
+
+So, we remove the files with one of these commands after the jar file is created:
+
+$ zip -d out/artifacts/jcloudsblobstorelistall_jar/jcloudsblobstorelistall.jar META-INF/*.DSA META-INF/*.SF
+
+$ 7z d -tzip out/artifacts/jcloudsblobstorelistall_jar/jcloudsblobstorelistall.jar META-INF/*.DSA META-INF/*.SF
