@@ -1,9 +1,9 @@
 /**
  * BlobStoreGetLocations is an example that handles a BlobStore container.
- * Get the available locations for BlobStore containers in several cloud providers, so:
- * S3 bucket on AWS (Amazon Web Services)
- * Blob Storage container on Microsoft Azure
- * Cloud Storage bucket on Google Cloud Platform (GCP)
+ * Get the available locations for BlobStore containers in several cloud providers:
+ *  - S3 bucket on AWS (Amazon Web Services)
+ *  - Blob Storage container on Microsoft Azure
+ *  - Cloud Storage bucket on Google Cloud Platform (GCP)
  */
 
 package example;
@@ -17,6 +17,7 @@ import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.domain.Location;
 
+
 public class BlobStoreGetLocations {
     private static String awsAccessKeyId;
     private static String awsSecretKey;
@@ -26,78 +27,27 @@ public class BlobStoreGetLocations {
     private static String gcloudPrivateKey;
 
     public static void main(String[] args) throws IOException {
-        String provider;
-        String identity;
-        String credential;
 
         // Load Configuration from a file and get the authentication data for the cloud providers
         loadConfiguration();
 
-        // ******************** AWS provider using S3 ********************
-        provider = "aws-s3";
-        identity = awsAccessKeyId;
-        credential = awsSecretKey;
-
-        // Init
-        BlobStoreContext contextAWS = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAWS = contextAWS.getBlobStore();
+        // ******************** AWS S3 provider ********************
 
         System.out.println("AWS locations:");
-        // Get available locations
-        for (Location pLocation : blobStoreAWS.listAssignableLocations()) {
-            System.out.println("  - " + pLocation.getId());
-        }
-
+        getLocationsBlobStore("aws-s3", awsAccessKeyId, awsSecretKey);
         System.out.println();
 
-        contextAWS.close();
-
-        // ******************** Azure provider using Blob Storage ********************
-        provider = "azureblob";
-        identity = azureAccountName;
-        credential = azureAccountKey;
-
-        // Init
-        BlobStoreContext contextAzure = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAzure = contextAzure.getBlobStore();
+        // ******************** Azure Blob Storage provider ********************
 
         System.out.println("Azure locations:");
-        // Get available locations
-        for (Location pLocation : blobStoreAzure.listAssignableLocations()) {
-            System.out.println("  - " + pLocation.getId());
-        }
-
+        getLocationsBlobStore("azureblob", azureAccountName, azureAccountKey);
         System.out.println();
 
-        contextAzure.close();
-
-        // ******************** Google Cloud provider using Cloud Storage ********************
-        provider = "google-cloud-storage";
-        identity = gcloudClientEmail;
-        credential = gcloudPrivateKey;
-
-        // Init
-        BlobStoreContext contextGoogleCloud = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreGoogleCloud = contextGoogleCloud.getBlobStore();
+        // ******************** Google Cloud Storage provider ********************
 
         System.out.println("Google Cloud locations:");
-        // Get available locations
-        for (Location pLocation : blobStoreGoogleCloud.listAssignableLocations()) {
-            System.out.println("  - " + pLocation.getId());
-        }
-
+        getLocationsBlobStore("google-cloud-storage", gcloudClientEmail, gcloudPrivateKey);
         System.out.println();
-
-        contextGoogleCloud.close();
     }
 
 
@@ -124,5 +74,27 @@ public class BlobStoreGetLocations {
         // Google Cloud
         gcloudClientEmail = prop.getProperty("gcloud_client_email");
         gcloudPrivateKey = prop.getProperty("gcloud_private_key");
+    }
+
+
+    /**
+     * Get available locations for BlobStore containers
+     */
+    private static void getLocationsBlobStore(String provider, String identity, String credential) {
+        // Init
+        BlobStoreContext context = ContextBuilder.newBuilder(provider)
+                .credentials(identity, credential)
+                .buildView(BlobStoreContext.class);
+
+        // Instantiate a BlobStore
+        BlobStore blobStore = context.getBlobStore();
+
+        // Get available locations
+        for (Location pLocation : blobStore.listAssignableLocations()) {
+            System.out.println("  - " + pLocation.getId());
+        }
+
+        // Disconnect
+        context.close();
     }
 }

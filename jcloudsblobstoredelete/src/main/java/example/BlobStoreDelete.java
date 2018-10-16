@@ -1,9 +1,9 @@
 /**
  * BlobStoreDelete is an example that handles a BlobStore container.
- * Delete a BlobStore container, so a:
- * S3 bucket on AWS (Amazon Web Services)
- * Blob Storage container on Microsoft Azure
- * Cloud Storage bucket on Google Cloud Platform (GCP)
+ * Delete a BlobStore container in several cloud providers:
+ *  - S3 bucket on AWS (Amazon Web Services)
+ *  - Blob Storage container on Microsoft Azure
+ *  - Cloud Storage bucket on Google Cloud Platform (GCP)
  * You must provide 1 parameter:
  * BUCKET_NAME = Name of the bucket
  */
@@ -18,7 +18,9 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 
+
 public class BlobStoreDelete {
+
     private static String awsAccessKeyId;           // AWS Access Key ID
     private static String awsSecretKey;             // AWS Secret Key
     private static String azureAccountName;         // Azure Storage Account Name
@@ -27,9 +29,6 @@ public class BlobStoreDelete {
     private static String gcloudPrivateKey;         // Google Cloud Private Key
 
     public static void main(String[] args) throws IOException {
-        String provider;
-        String identity;
-        String credential;
 
         if (args.length < 1) {
             System.out.println("Not enough parameters.\nProper Usage is: java -jar blobstoredelete.jar <BUCKET_NAME>");
@@ -45,64 +44,25 @@ public class BlobStoreDelete {
         loadConfiguration();
 
         // ******************** AWS S3 provider ********************
-        provider = "aws-s3";
-        identity = awsAccessKeyId;
-        credential = awsSecretKey;
 
-        System.out.println("Deleting AWS S3 bucket ...");
+        System.out.println("AWS S3 bucket:");
 
-        // Init
-        BlobStoreContext contextAWS = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAWS = contextAWS.getBlobStore();
-
-        // Delete an AWS S3 bucket
-        blobStoreAWS.deleteContainer(containerName);
-        System.out.println("Deleted AWS S3 bucket");
-
-        contextAWS.close();
+        deleteBlobStore("aws-s3", awsAccessKeyId, awsSecretKey,
+                            containerName);
 
         // ******************** Azure Blob Storage provider ********************
-        provider = "azureblob";
-        identity = azureAccountName;
-        credential = azureAccountKey;
 
-        System.out.println("Deleting Azure Blob Storage container ...");
+        System.out.println("Azure Blob Storage container:");
 
-        // Init
-        BlobStoreContext contextAzure = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAzure = contextAzure.getBlobStore();
-
-        // Delete an Azure Blob Storage container
-        blobStoreAzure.deleteContainer(containerName);
-        System.out.println("Deleted Azure Blob Storage container");
-
-        contextAzure.close();
-
+        deleteBlobStore("azureblob", azureAccountName, azureAccountKey,
+                            containerName);
+        
         // ******************** Google Cloud Storage provider ********************
-        provider = "google-cloud-storage";
-        identity = gcloudClientEmail;
-        credential = gcloudPrivateKey;
 
-        System.out.println("Deleting Google Cloud Storage bucket ...");
+        System.out.println("Google Cloud Storage bucket:");
 
-        // Init
-        BlobStoreContext contextGoogleCloud = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreGoogleCloud = contextGoogleCloud.getBlobStore();
-
-        // Delete a Google Cloud Storage
-        blobStoreGoogleCloud.deleteContainer(containerName);
-        System.out.println("Deleted Google Cloud Storage bucket");
-
-        contextGoogleCloud.close();
+        deleteBlobStore("google-cloud-storage", gcloudClientEmail, gcloudPrivateKey,
+                            containerName);
     }
 
 
@@ -129,5 +89,30 @@ public class BlobStoreDelete {
         // Google Cloud
         gcloudClientEmail = prop.getProperty("gcloud_client_email");
         gcloudPrivateKey = prop.getProperty("gcloud_private_key");
+    }
+
+
+    /**
+     * Delete a BlobStore container
+     */
+    private static void deleteBlobStore(String provider, String identity, String credential,
+                                            String containerName) {
+        // Init
+        BlobStoreContext context = ContextBuilder.newBuilder(provider)
+                .credentials(identity, credential)
+                .buildView(BlobStoreContext.class);
+
+        System.out.printf("Deleting BlobStore container on \"%s\" ...\n", provider);
+
+        // Instantiate a BlobStore
+        BlobStore blobStore = context.getBlobStore();
+
+        // Delete a BlobStore container
+        blobStore.deleteContainer(containerName);
+
+        System.out.println("Deleted.");
+
+        // Disconnect
+        context.close();
     }
 }

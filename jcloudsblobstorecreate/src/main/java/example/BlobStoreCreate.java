@@ -1,9 +1,9 @@
 /**
  * BlobStoreCreate is an example that handles a BlobStore container.
- * Create a new BlobStore container, so a:
- * S3 bucket on AWS (Amazon Web Services)
- * Blob Storage container on Microsoft Azure
- * Cloud Storage bucket on Google Cloud Platform (GCP)
+ * Create a new BlobStore container in several cloud providers:
+ *  - S3 bucket on AWS (Amazon Web Services)
+ *  - Blob Storage container on Microsoft Azure
+ *  - Cloud Storage bucket on Google Cloud Platform (GCP)
  * You must provide 1 parameter:
  * BUCKET_NAME = Name of the bucket
  */
@@ -32,9 +32,6 @@ public class BlobStoreCreate {
     private static String gcloudPrivateKey;         // Google Cloud Private Key
 
     public static void main(String[] args) throws IOException {
-        String provider;
-        String identity;
-        String credential;
 
         if (args.length < 1) {
             System.out.println("Not enough parameters.\nProper Usage is: java -jar blobstorecreate.jar <BUCKET_NAME>");
@@ -50,86 +47,26 @@ public class BlobStoreCreate {
         loadConfiguration();
 
         // ******************** AWS S3 provider ********************
-        provider = "aws-s3";
-        identity = awsAccessKeyId;
-        credential = awsSecretKey;
 
-        System.out.println("Creating AWS S3 bucket ...");
+        System.out.println("AWS S3 bucket:");
 
-        // Init
-        BlobStoreContext contextAWS = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAWS = contextAWS.getBlobStore();
-
-        // Create an AWS S3 bucket in a location
-        String locationStringAWS = LOCATION_AWS;
-        Location locationAWS = null;
-        // Look for the location
-        for (Location pLocation : blobStoreAWS.listAssignableLocations()) {
-            if (locationStringAWS.contains(pLocation.getId())) {
-                locationAWS = pLocation;
-                break;
-            }
-        }
-
-        boolean createdAWS = blobStoreAWS.createContainerInLocation(locationAWS, containerName);
-        if (createdAWS) {
-            System.out.println("Created AWS S3 bucket");
-        } else {
-            System.out.println("Error: AWS S3 bucket already exists!!");
-        }
-
-        contextAWS.close();
+        // With AWS it is possible to select a location
+        createBlobStore("aws-s3", awsAccessKeyId, awsSecretKey,
+                            containerName, LOCATION_AWS);
 
         // ******************** Azure Blob Storage provider ********************
-        provider = "azureblob";
-        identity = azureAccountName;
-        credential = azureAccountKey;
 
-        System.out.println("Creating Azure Blob Storage container ...");
+        System.out.println("Azure Blob Storage container:");
 
-        // Init
-        BlobStoreContext contextAzure = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreAzure = contextAzure.getBlobStore();
-
-        // Create an Azure Blob Storage container
-        boolean createdAzure = blobStoreAzure.createContainerInLocation(null, containerName);
-        if (createdAzure) {
-            System.out.println("Created Azure Blob Storage container");
-        } else {
-            System.out.println("Error: Azure Blob Storage container already exists!!");
-        }
-
-        contextAzure.close();
+        createBlobStore("azureblob", azureAccountName, azureAccountKey,
+                            containerName, null);
 
         // ******************** Google Cloud Storage provider ********************
-        provider = "google-cloud-storage";
-        identity = gcloudClientEmail;
-        credential = gcloudPrivateKey;
 
-        System.out.println("Creating Google Cloud Storage bucket ...");
+        System.out.println("Google Cloud Storage bucket:");
 
-        // Init
-        BlobStoreContext contextGoogleCloud = ContextBuilder.newBuilder(provider)
-                .credentials(identity, credential)
-                .buildView(BlobStoreContext.class);
-
-        BlobStore blobStoreGoogleCloud = contextGoogleCloud.getBlobStore();
-
-        // Create a Google Cloud Storage Multi-region bucket
-        boolean createdGoogleCloud = blobStoreGoogleCloud.createContainerInLocation(null, containerName);
-        if (createdGoogleCloud) {
-            System.out.println("Created Google Cloud Storage bucket");
-        } else {
-            System.out.println("Error: Google Cloud Storage bucket already exists!!");
-        }
-
-        contextGoogleCloud.close();
+        createBlobStore("google-cloud-storage", gcloudClientEmail, gcloudPrivateKey,
+                            containerName, null);
     }
 
 
@@ -156,5 +93,44 @@ public class BlobStoreCreate {
         // Google Cloud
         gcloudClientEmail = prop.getProperty("gcloud_client_email");
         gcloudPrivateKey = prop.getProperty("gcloud_private_key");
+    }
+
+
+    /**
+     * Create a BlobStore container
+     */
+    private static void createBlobStore(String provider, String identity, String credential,
+                                            String containerName, String containerLocationString) {
+        // Init
+        BlobStoreContext context = ContextBuilder.newBuilder(provider)
+                .credentials(identity, credential)
+                .buildView(BlobStoreContext.class);
+
+        System.out.printf("Creating BlobStore container on \"%s\" ...\n", provider);
+
+        // Instantiate a BlobStore
+        BlobStore blobStore = context.getBlobStore();
+
+        Location location = null;
+        if (containerLocationString != null) {
+            // Look for the location
+            for (Location pLocation : blobStore.listAssignableLocations()) {
+                if (containerLocationString.contains(pLocation.getId())) {
+                    location = pLocation;
+                    break;
+                }
+            }
+        }
+
+        // Create a BlobStore container
+        boolean created = blobStore.createContainerInLocation(location, containerName);
+        if (created) {
+            System.out.println("Created.");
+        } else {
+            System.out.println("Error: BlobStore container already exists!!");
+        }
+
+        // Disconnect
+        context.close();
     }
 }
