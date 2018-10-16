@@ -5,7 +5,7 @@
  *  - Blob Storage container on Microsoft Azure
  *  - Cloud Storage bucket on Google Cloud Platform (GCP)
  * You must provide 1 parameter:
- * BUCKET_NAME = Name of the bucket
+ * CONTAINER_NAME = Name of the container
  */
 
 package example;
@@ -34,7 +34,7 @@ public class BlobStoreCreate {
     public static void main(String[] args) throws IOException {
 
         if (args.length < 1) {
-            System.out.println("Not enough parameters.\nProper Usage is: java -jar blobstorecreate.jar <BUCKET_NAME>");
+            System.out.println("Not enough parameters.\nProper Usage is: java -jar blobstorecreate.jar <CONTAINER_NAME>");
             System.exit(1);
         }
 
