@@ -46,7 +46,7 @@ This is the list of examples:
 * [jcloudsblobstorelistall](/jcloudsblobstorelistall) - Apache jclouds BlobStore List: Example of how to handle BlobStore containers and list all the containers in BlobStore.
 * [jcloudsblobstoreupload](/jcloudsblobstoreupload) - Apache jclouds BlobStore Upload: Example of how to handle BlobStore containers and upload a local file to a BlobStore container.
 * [jcloudsblobstoredownload](/jcloudsblobstoredownload) - Apache jclouds BlobStore Download: Example of how to handle BlobStore containers and download a blob from a BlobStore container to a local file.
-* [jcloudsblobstoredeleteobject](/jcloudsblobstoredeleteobject) -  Apache jclouds BlobStore Delete Object: Example of how to handle BlobStore containers and delete a blob in a BlobStore container.
+* [jcloudsblobstoredeleteblob](/jcloudsblobstoredeleteblob) -  Apache jclouds BlobStore Delete Object: Example of how to handle BlobStore containers and delete a blob in a BlobStore container.
 
 ## License
 
