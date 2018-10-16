@@ -156,12 +156,12 @@ You must have:
 
   You must provide 1 parameter:
   
-  * `<BUCKET_NAME>` = Bucket name
+  * `<CONTAINER_NAME>` = Container name
 
   Run application:
 
   ```bash
-  java -jar jcloudsblobstoredelete.jar bucket-name
+  java -jar jcloudsblobstoredelete.jar container-name
   ```
 
 * Test the application.

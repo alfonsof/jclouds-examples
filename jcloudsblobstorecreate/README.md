@@ -158,12 +158,12 @@ You must have:
 
   You must provide 1 parameter:
   
-  * `<BUCKET_NAME>` = Bucket name
+  * `<CONTAINER_NAME>` = Container name
 
   Run application:
 
   ```bash
-  java -jar jcloudsblobstorecreate.jar bucket-name
+  java -jar jcloudsblobstorecreate.jar container-name
   ```
 
 * Test the application.
