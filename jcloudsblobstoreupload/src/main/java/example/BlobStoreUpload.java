@@ -106,7 +106,7 @@ public class BlobStoreUpload {
 
 
     /**
-     * Delete a BlobStore container
+     * Upload a local file to a BlobStore container
      */
     private static void uploadBlobStore(String provider, String identity, String credential,
                                         String containerName, String blobName, String localFileName) {
