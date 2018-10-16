@@ -1,4 +1,4 @@
-# Apache jclouds BlobStore Delete Object Java example
+# Apache jclouds BlobStore Delete Blob Java example
 
 This folder contains a Java application example that handles BlobStore containers using [Apache jclouds](https://jclouds.apache.org/), the Java Multi-Cloud Toolkit, on:
 
@@ -167,7 +167,7 @@ You must have:
 
 * Test the application.
 
-  You should not see the deleted the blob in the:
+  You should not see the deleted blob in the:
 
   * S3 bucket on AWS (Amazon Web Services)
   * Blob Storage container on Microsoft Azure
