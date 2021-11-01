@@ -53,23 +53,11 @@ You must have:
     ```bash
     az ad sp create-for-rbac --sdk-auth > my.azureauth
     ```
-  
+
 * Configure your Azure storage account.
 
-  An Azure storage account provides a unique namespace to store and access your Azure Storage data objects.
+  An Azure storage account contains all of your Azure Storage data objects: blobs, file shares, queues, tables, and disks. The storage account provides a unique namespace for your Azure Storage data that's accessible from anywhere in the world over HTTP or HTTPS. Data in your storage account is durable and highly available, secure, and massively scalable.
   
-  There are two types of storage accounts:
-  
-  * A general-purpose storage account gives you access to Azure Storage services such as Tables, Queues, Files, Blobs and Azure virtual machine disks under a single account.
-
-  * A Blob storage account is a specialized storage account for storing your unstructured data as blobs (objects) in Azure Storage.
-    Blob storage accounts are similar to a existing general-purpose storage accounts and share all the great durability, availability,
-    scalability, and performance features that you use today including 100% API consistency for block blobs and append blobs.
-
-    For applications requiring only block or append blob storage, it is recommend using Blob storage accounts.
-
-    Blob storage accounts expose the Access Tier attribute which can be specified during account creation and modified later as needed.
-
   An storage account can content containers and every container can content blobs.
 
   ```bash
@@ -84,27 +72,31 @@ You must have:
                   └── Blob_2_3/
   ```
 
-  Create a storage account:
+  Create a storage account using the Azure portal:
   
-  1. Sign in to the Azure portal.
-  2. Select the "Storage accounts" option. On the Storage Accounts window that appears, choose Add.
-  3. Enter a name for your storage account.
-  4. Specify the deployment model to be used: Resource Manager or Classic. Select Resource Manager deployment model.
-  5. Select the type of storage account: General purpose or Blob storage. Select General purpose.
-  6. Select the geographic location for your storage account. 
-  7. Select the replication option for the storage account: LRS, GRS, RA-GRS, or ZRS. Set Replication to Locally Redundant storage (LRS).
-  8. Select the subscription in which you want to create the new storage account.
-  9. Specify a new resource group or select an existing resource group. 
-  10. Click Create to create the storage account.
+  1. Select the `Storage account` option and choose `Create`.
+  2. Select the `Subscription` in which you want to create the new storage account.
+  3. Select the `Resource Group` for your storage account.
+  4. Enter a `name` for your storage account.
+  5. Select the `Region` for your storage account. 
+  6. Select the `Performance` to be used.
+  7. Select the `Redundancy` to be used.
+  8. Click `Create` to create the storage account.
+
+  A connection string includes the authentication information required for your application to access data in an Azure Storage account at runtime.
+
+  Your application needs to access the connection string at runtime to authorize requests made to Azure Storage.
 
   You can find your storage account's connection strings in the Azure portal:
   
-    1. Navigate to "Storage Accounts".
+    1. Navigate to `Storage Account`.
     2. Select your storage account.
-    3. You can see your connection strings and get your account name and account key.
+    3. Select `Access keys` and you can see your Storage account name, connection strings and account keys.
+
+  The connection string looks like this:
 
     ```bash
-    DefaultEndpointsProtocol=https;AccountName=ACCOUNT_NAME;AccountKey=ACCOUNT_KEY;EndpointSuffix=core.windows.net
+    DefaultEndpointsProtocol=https;AccountName=<AZURE_ACCOUNT_NAME>;AccountKey=<AZURE_ACCOUNT_KEY>;EndpointSuffix=core.windows.net
     ```
 
   You must get the created:
@@ -154,14 +146,14 @@ You must have:
 
 * Run the code.
 
-  You must provide 1 parameter:
+  You must provide 1 parameter, replace the value of:
   
-  * `<CONTAINER_NAME>` = Container name
+  * `<CONTAINER_NAME>` by Container name.
 
   Run application:
 
   ```bash
-  java -jar jcloudsblobstoredelete.jar container-name
+  java -jar jcloudsblobstoredelete.jar <CONTAINER_NAME>
   ```
 
 * Test the application.
